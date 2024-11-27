@@ -9,6 +9,6 @@ Route::get('/', function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/projects', function () {
-    return response()->json(Project::all());
-});
+// Route::get('/projects', function () {
+//     return response()->json(Project::all());
+// });
