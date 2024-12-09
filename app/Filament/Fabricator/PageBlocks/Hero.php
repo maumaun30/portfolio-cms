@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Filament\Fabricator\PageBlocks;
 
 use App\Helpers\FabricatorHelper;
 use Filament\Forms\Components\Tabs;
@@ -15,11 +15,11 @@ use Filament\Support\Enums\IconPosition;
 use Z3d0X\FilamentFabricator\PageBlocks\PageBlock;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 
-class {{ class }} extends PageBlock
+class Hero extends PageBlock
 {
     public static function getBlockSchema(): Block
     {
-        return Block::make('{{ shortName }}')
+        return Block::make('hero')
             ->schema([
                 Tabs::make()
                     ->tabs([
@@ -27,7 +27,13 @@ class {{ class }} extends PageBlock
                             ->icon('heroicon-o-pencil-square')
                             ->iconPosition(IconPosition::After)
                             ->schema([
-                                // Content Fields
+                                TextInput::make('heading'),
+                                RichEditor::make('content'),
+                                FieldSet::make('cta_button')
+                                    ->schema([
+                                        TextInput::make('text'),
+                                        TextInput::make('link'),
+                                    ])
                             ]),
                         FabricatorHelper::getStyleTab(),
                         FabricatorHelper::getSettingsTab()
