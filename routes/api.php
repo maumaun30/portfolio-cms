@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Awcodes\Curator\Models\Media;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProjectController;
 
 // Route::get('/api-token', function (Request $request) {
@@ -28,3 +29,5 @@ Route::get('media/{id}', function ($mediaId) {
 
     return null;
 });
+
+Route::get('/page/{filamentFabricatorPage?}', [PageController::class, 'getPageData']);

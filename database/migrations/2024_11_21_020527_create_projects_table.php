@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->longText('description')->nullable();
+            $table->string('live_link')->nullable();
+            $table->string('repo_link')->nullable();
             $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

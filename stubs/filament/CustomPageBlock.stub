@@ -1,0 +1,43 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Helpers\FabricatorHelper;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Builder\Block;
+use Filament\Support\Enums\IconPosition;
+use Z3d0X\FilamentFabricator\PageBlocks\PageBlock;
+use Awcodes\Curator\Components\Forms\CuratorPicker;
+
+class {{ class }} extends PageBlock
+{
+    public static function getBlockSchema(): Block
+    {
+        return Block::make('{{ shortName }}')
+            ->schema([
+                Tabs::make()
+                    ->tabs([
+                        Tab::make('Content')
+                            ->icon('heroicon-o-pencil-square')
+                            ->iconPosition(IconPosition::After)
+                            ->schema([
+                                // Content Fields
+                            ]),
+                        FabricatorHelper::getStyleTab(),
+                        FabricatorHelper::getSettingsTab()
+                    ])
+                    ->contained()
+            ]);
+    }
+
+    public static function mutateData(array $data): array
+    {
+        return $data;
+    }
+}

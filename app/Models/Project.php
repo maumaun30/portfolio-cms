@@ -10,6 +10,8 @@ class Project extends Model
         'name',
         'slug',
         'description',
+        'live_link',
+        'repo_link',
         'status',
         'start_date',
         'end_date',

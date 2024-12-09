@@ -4,7 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Filament\Forms\Components\Actions\Action;
 use Illuminate\Auth\Notifications\ResetPassword;
+use App\Console\Commands\CustomMakePageBlockCommand;
+use Z3d0X\FilamentFabricator\Forms\Components\PageBuilder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +29,18 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Model::unguard();
+
+        PageBuilder::configureUsing(function (PageBuilder $builder) {
+            $builder
+                ->collapsible()
+                ->collapsed()
+                ->deleteAction(
+                    fn(Action $action) => $action->requiresConfirmation(),
+                );
+        });
+
+        $this->commands([
+            CustomMakePageBlockCommand::class,
+        ]);
     }
 }

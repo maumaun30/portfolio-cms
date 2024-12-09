@@ -15,6 +15,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Z3d0X\FilamentFabricator\FilamentFabricatorPlugin;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -58,16 +59,15 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                FilamentFabricatorPlugin::make(),
                 CuratorPlugin::make()
                     ->label('Media')
                     ->pluralLabel('Media')
                     ->navigationIcon('heroicon-o-photo')
-                    ->navigationGroup('Content')
                     ->navigationSort(3)
-                    ->navigationCountBadge()
                     ->registerNavigation(true)
                     ->defaultListView('grid' || 'list')
-                // ->resource(Media::class)
-            ]);;
+            ])
+            ->viteTheme('resources/css/filament/admin/theme.css');
     }
 }

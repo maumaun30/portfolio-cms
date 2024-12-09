@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Project;
 
 Route::get('/', function () {
-    return ['Laravel' => app()->version()];
+    return redirect('/admin');
 });
 
 require __DIR__ . '/auth.php';
