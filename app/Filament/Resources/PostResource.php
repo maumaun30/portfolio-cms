@@ -22,6 +22,7 @@ use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Awcodes\Curator\Components\Tables\CuratorColumn;
 use App\Filament\Resources\PostResource\RelationManagers;
+use FilamentTiptapEditor\TiptapEditor;
 
 class PostResource extends Resource
 {
@@ -58,7 +59,7 @@ class PostResource extends Resource
                                             ->required()
                                             ->maxLength(255)
                                             ->columnSpanFull(),
-                                        Forms\Components\RichEditor::make('body')
+                                        TiptapEditor::make('body')
                                             ->required()
                                             ->columnSpanFull(),
                                         Forms\Components\Textarea::make('excerpt')

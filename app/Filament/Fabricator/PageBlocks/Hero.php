@@ -5,15 +5,19 @@ namespace App\Filament\Fabricator\PageBlocks;
 use App\Helpers\FabricatorHelper;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Select;
+use FilamentTiptapEditor\TiptapEditor;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\IconPosition;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Builder\Block;
-use Filament\Support\Enums\IconPosition;
 use Z3d0X\FilamentFabricator\PageBlocks\PageBlock;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
+use Awcodes\TableRepeater\Components\TableRepeater;
+use Awcodes\TableRepeater\Header;
 
 class Hero extends PageBlock
 {
@@ -27,13 +31,16 @@ class Hero extends PageBlock
                             ->icon('heroicon-o-pencil-square')
                             ->iconPosition(IconPosition::After)
                             ->schema([
-                                TextInput::make('heading'),
-                                RichEditor::make('content'),
-                                FieldSet::make('cta_button')
-                                    ->schema([
-                                        TextInput::make('text'),
-                                        TextInput::make('link'),
+                                TableRepeater::make('sub_headings')
+                                    ->headers([
+                                        Header::make('name')
                                     ])
+                                    ->renderHeader(false)
+                                    ->schema([
+                                        TextInput::make('item')
+                                    ]),
+                                TextInput::make('heading'),
+                                TiptapEditor::make('content'),
                             ]),
                         FabricatorHelper::getStyleTab(),
                         FabricatorHelper::getSettingsTab()

@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\MediaHelper;
 use Illuminate\Http\Request;
 use Awcodes\Curator\Models\Media;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +32,4 @@ Route::get('media/{id}', function ($mediaId) {
 });
 
 Route::get('/page/{filamentFabricatorPage?}', [PageController::class, 'getPageData']);
+Route::get('/media/{id}', [MediaHelper::class, 'getMedia']);

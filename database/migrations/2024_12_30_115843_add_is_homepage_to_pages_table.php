@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menus', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->nullable();
-            $table->string('menu_id')->unique();
-            $table->json('menu_items')->nullable();
-            $table->string('sort')->nullable();
-            $table->timestamps();
+        Schema::table('pages', function (Blueprint $table) {
+            $table->boolean('is_homepage')->nullable()->after('parent_id');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menus');
+        Schema::table('pages', function (Blueprint $table) {
+            //
+        });
     }
 };

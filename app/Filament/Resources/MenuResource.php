@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\MenuResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MenuResource\RelationManagers;
-use Filament\Forms\Components\Toggle;
+use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 
 class MenuResource extends Resource
 {
@@ -46,7 +47,7 @@ class MenuResource extends Resource
                         TextInput::make('menu_id')
                             ->required()
                             ->readOnly(),
-                        Repeater::make('menu_items')
+                        TableRepeater::make('menu_items')
                             ->label('Items')
                             ->schema([
                                 TextInput::make('menu_text')
@@ -56,7 +57,10 @@ class MenuResource extends Resource
                                 Toggle::make('target')
                                     ->label('Open in new tab')
                             ])
-                            ->columns(2)
+                            ->reorderable()
+                            ->cloneable()
+                            ->collapsible()
+                            ->orderColumn('sort')
                     ])
             ]);
     }

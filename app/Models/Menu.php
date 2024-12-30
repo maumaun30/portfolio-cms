@@ -9,7 +9,8 @@ class Menu extends Model
     protected $fillable = [
         'name',
         'menu_id',
-        'menu_items'
+        'menu_items',
+        'sort'
     ];
 
     protected $casts = [

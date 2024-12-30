@@ -20,6 +20,7 @@ use App\Filament\Resources\ProjectResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProjectResource\RelationManagers;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
+use FilamentTiptapEditor\TiptapEditor;
 
 class ProjectResource extends Resource
 {
@@ -43,7 +44,7 @@ class ProjectResource extends Resource
                         $set('slug', Str::slug($state));
                     }),
                 TextInput::make('slug'),
-                RichEditor::make('description'),
+                TiptapEditor::make('description'),
                 DatePicker::make('start_date')
                     ->native(false),
                 DatePicker::make('end_date')
