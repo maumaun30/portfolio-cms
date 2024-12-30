@@ -51,15 +51,6 @@ jobs:
           --exclude '.DS_Store' \
           . ${{ secrets.USER }}@${{ secrets.HOST }}:/home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html
 
-      - name: Ensure required directories exist
-        run: |
-          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
-          mkdir -p /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html/bootstrap/cache
-          mkdir -p /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html/storage
-          chmod -R 775 /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html/bootstrap/cache
-          chmod -R 775 /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html/storage
-          EOF
-
       # Install dependencies and clear cache
       - name: Clear Laravel cache and install dependencies
         run: |
