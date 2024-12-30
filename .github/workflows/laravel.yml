@@ -56,7 +56,7 @@ jobs:
         run: |
           ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
           cd /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html
-          composer install --no-dev --optimize-autoloader
+          composer2 install --no-dev --optimize-autoloader
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
