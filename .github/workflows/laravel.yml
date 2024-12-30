@@ -1,0 +1,58 @@
+name: CMS CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Set up SSH and Add Server to Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+
+      - name: Ensure target directory exists
+        run: |
+          ssh ${{ secrets.USER }}@${{ secrets.HOST }} "mkdir -p /home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }}"
+
+      - name: Sync files to server
+        run: |
+          rsync -avz --delete --no-times \
+          --exclude '.env' \
+          --exclude '.git' \
+          --exclude '.gitignore' \
+          --exclude 'node_modules' \
+          --exclude 'vendor' \
+          --exclude 'bootstrap/cache' \
+          --exclude 'public' \
+          --exclude 'storage' \
+          --exclude 'storage/debugbar' \
+          --exclude 'tests' \
+          --exclude 'docker' \
+          --exclude '.DS_Store' \
+          . ${{ secrets.USER }}@${{ secrets.HOST }}:/home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }}
+
+      - name: Clear Laravel cache
+        run: |
+          ssh ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }} && composer install && composer dump-autoload && php artisan filament:optimize"
+
+      - name: Run npm build production
+        run: |
+          ssh ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }} && npm run build"
