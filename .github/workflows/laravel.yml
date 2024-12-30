@@ -11,6 +11,7 @@ jobs:
 
     steps:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -30,7 +31,7 @@ jobs:
 
       - name: Ensure target directory exists
         run: |
-          ssh ${{ secrets.USER }}@${{ secrets.HOST }} "mkdir -p /home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }}"
+          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "mkdir -p /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io
 
       - name: Sync files to server
         run: |
@@ -47,12 +48,12 @@ jobs:
           --exclude 'tests' \
           --exclude 'docker' \
           --exclude '.DS_Store' \
-          . ${{ secrets.USER }}@${{ secrets.HOST }}:/home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }}
+          . ${{ secrets.USER }}@${{ secrets.HOST }}:/home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io
 
       - name: Clear Laravel cache
         run: |
-          ssh ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }} && composer install && composer dump-autoload && php artisan filament:optimize"
+          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io && composer install && composer dump-autoload && php artisan filament:optimize"
 
       - name: Run npm build production
         run: |
-          ssh ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/htdocs/${{ secrets.HOST }} && npm run build"
+          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io && npm run build"
