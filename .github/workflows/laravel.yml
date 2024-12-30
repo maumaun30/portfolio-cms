@@ -29,9 +29,9 @@ jobs:
       #     eval "$(ssh-agent -s)"
       #     ssh-add ~/.ssh/id_rsa
 
-      - name: Ensure target directory exists
-        run: |
-          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "mkdir -p /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io
+      # - name: Ensure target directory exists
+      #   run: |
+      #     ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "mkdir -p /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io
 
       - name: Sync files to server
         run: |
