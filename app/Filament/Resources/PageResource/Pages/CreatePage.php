@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PageResources\Pages;
+namespace App\Filament\Resources\PageResource\Pages;
 
 use Z3d0X\FilamentFabricator\Resources\PageResource\Pages\CreatePage as BaseCreatePage;
 

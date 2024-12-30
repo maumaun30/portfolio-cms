@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\PageResources\Pages;
+namespace App\Filament\Resources\PageResource\Pages;
 
 use App\Models\Page;
 use Filament\Pages\Actions;
