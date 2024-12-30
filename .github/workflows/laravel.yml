@@ -10,32 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      # Set up PHP
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3" # Adjust according to your Laravel PHP version
 
+      # Checkout code from the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Set up SSH agent
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # - name: Set up SSH and Add Server to Known Hosts
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      #     chmod 600 ~/.ssh/id_rsa
-      #     ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
-      #     eval "$(ssh-agent -s)"
-      #     ssh-add ~/.ssh/id_rsa
-
-      # - name: Ensure target directory exists
-      #   run: |
-      #     ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "mkdir -p /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io
-
+      # Sync files to the server
       - name: Sync files to server
         run: |
-          rsync -avz --delete --no-times \
+          rsync -e "ssh -p 65002" -avz --delete --no-times \
           --exclude '.env' \
           --exclude '.git' \
           --exclude '.gitignore' \
@@ -48,12 +41,24 @@ jobs:
           --exclude 'tests' \
           --exclude 'docker' \
           --exclude '.DS_Store' \
-          . ${{ secrets.USER }}@${{ secrets.HOST }}:/home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io
+          . ${{ secrets.USER }}@${{ secrets.HOST }}:/home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html
 
-      - name: Clear Laravel cache
+      # Install dependencies and clear cache
+      - name: Clear Laravel cache and install dependencies
         run: |
-          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io && composer install && composer dump-autoload && php artisan filament:optimize"
+          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
+          cd /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html
+          composer install --no-dev --optimize-autoloader
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          EOF
 
+      # Build frontend assets
       - name: Run npm build production
         run: |
-          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} "cd /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io && npm run build"
+          ssh -p 65002 ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
+          cd /home/${{ secrets.USER }}/domains/mau-portfolio-cms.mallshuck.io/public_html
+          npm ci
+          npm run build
+          EOF
