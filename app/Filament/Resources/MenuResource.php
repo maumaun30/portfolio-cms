@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\Menu;
+use App\Models\Page;
 use Filament\Tables;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -16,6 +17,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\MenuResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -27,6 +29,15 @@ class MenuResource extends Resource
     protected static ?string $model = Menu::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
+
+    protected static function dataPages($search)
+    {
+        $pages = $search ? Page::where('slug', 'like', '%' . $search . '%')->take(10)->get(['id', 'slug']) : [];
+
+        return [
+            'pages' => $pages,
+        ];
+    }
 
     public static function form(Form $form): Form
     {
@@ -53,7 +64,10 @@ class MenuResource extends Resource
                                 TextInput::make('menu_text')
                                     ->label('Text'),
                                 TextInput::make('menu_link')
-                                    ->label('Link'),
+                                    ->label('Link')
+                                    ->datalist(function ($state) {
+                                        return self::dataPages($state); // $state contains the current input value
+                                    }),
                                 Toggle::make('target')
                                     ->label('Open in new tab')
                             ])

@@ -15,6 +15,7 @@
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "yaza/laravel-google-drive-storage": "^3.0",
         "z3d0x/filament-fabricator": "^2.2"
     },
     "require-dev": {

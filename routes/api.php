@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProjectController;
+use App\Models\Menu;
 
 // Route::get('/api-token', function (Request $request) {
 //     // Return the API token (you can fetch it from environment variables or a database)
@@ -21,15 +22,16 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::apiResource('projects', ProjectController::class);
 
-Route::get('media/{id}', function ($mediaId) {
-    $media = Media::find($mediaId);
-
-    if ($media) {
-        return Storage::url($media->path);
-    }
-
-    return null;
-});
-
 Route::get('/page/{filamentFabricatorPage?}', [PageController::class, 'getPageData']);
 Route::get('/media/{id}', [MediaHelper::class, 'getMedia']);
+
+
+Route::get('/search-models', function (\Illuminate\Http\Request $request) {
+    $query = $request->get('query', '');
+
+    $results = Menu::where('name', 'like', '%' . $query . '%')
+        ->take(10)
+        ->get(['id', 'name']);
+
+    return response()->json($results);
+});
